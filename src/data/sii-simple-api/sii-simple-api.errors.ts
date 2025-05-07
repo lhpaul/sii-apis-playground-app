@@ -1,12 +1,12 @@
-export enum GetSalesForMonthErrorCode {
+export enum GetTransactionsForMonthErrorCode {
   UNKNOWN_ERROR = 'unknown-error',
 }
-export class GetSalesForMonthError extends Error {
-  code: GetSalesForMonthErrorCode;
+export class GetTransactionsForMonthError extends Error {
+  code: GetTransactionsForMonthErrorCode;
   data?: any;
 
   constructor(input: {
-    code: GetSalesForMonthErrorCode,
+    code: GetTransactionsForMonthErrorCode,
     message?: string;
     data?: any,
   }) {

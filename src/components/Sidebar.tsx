@@ -8,12 +8,13 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeature }) => {
   const features = [
     { id: 'sales', name: 'Ventas' },
+    { id: 'purchases', name: 'Compras' },
     // Add more features here in the future
   ];
 
   return (
     <div className="sidebar">
-      <div className="sidebar-header">SII Scripts</div>
+      <div className="sidebar-header">SII</div>
       <ul className="sidebar-nav">
         {features.map((feature) => (
           <li

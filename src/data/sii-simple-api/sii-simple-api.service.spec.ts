@@ -2,7 +2,7 @@ import { jest, describe, expect, it, beforeEach, afterEach } from '@jest/globals
 import { apiRequest } from '../../utils/api-helper/api-helper.utils';
 import { ENVIRONMENT_VARIABLE_NOT_DEFINED_ERROR, SII_SIMPLE_API_BASE_URL } from './sii-simple-api.constants';
 import { SiiSimpleApiService } from './sii-simple-api.service';
-import { GetSalesForMonthError, GetSalesForMonthErrorCode } from './sii-simple-api.errors';
+import { GetTransactionsForMonthError, GetTransactionsForMonthErrorCode } from './sii-simple-api.errors';
 
 
 // Mock the apiRequest function
@@ -10,7 +10,7 @@ jest.mock('../../utils/api-helper/api-helper.utils', () => ({
   apiRequest: jest.fn(),
 }));
 
-describe('SiiSimpleApiService', () => {
+describe(SiiSimpleApiService.name, () => {
   const mockApiKey = 'test-api-key';
   const originalEnv = process.env;
 
@@ -23,7 +23,7 @@ describe('SiiSimpleApiService', () => {
     process.env = originalEnv;
   });
 
-  describe('getInstance', () => {
+  describe(SiiSimpleApiService.getInstance.name, () => {
     describe('when no config is provided', () => {
       it('should throw an error if SII_SIMPLE_API_KEY is not defined', () => {
         delete process.env.SII_SIMPLE_API_KEY;
@@ -93,7 +93,7 @@ describe('SiiSimpleApiService', () => {
     });
   });
 
-  describe('getSalesForMonth', () => {
+  describe(SiiSimpleApiService.prototype.getTransactionsForMonth.name, () => {
     const mockParams = {
       year: 2023,
       month: 1,
@@ -168,11 +168,15 @@ describe('SiiSimpleApiService', () => {
               },
             ],
           },
+          compras: {
+            resumenes: [],
+            detalleCompras: [],
+          },
         },
       };
       (apiRequest as jest.MockedFunction<any>).mockResolvedValueOnce(mockResponse);
 
-      await service.getSalesForMonth(mockParams);
+      await service.getTransactionsForMonth(mockParams, true);
 
       expect(apiRequest).toHaveBeenCalledWith({
         method: 'POST',
@@ -202,12 +206,16 @@ describe('SiiSimpleApiService', () => {
             resumenes: [],
             detalleVentas: [],
           },
+          compras: {
+            resumenes: [],
+            detalleCompras: [],
+          },
         },
       };
 
       (apiRequest as jest.MockedFunction<any>).mockResolvedValueOnce(mockResponse);
 
-      await devService.getSalesForMonth(mockParams);
+      await devService.getTransactionsForMonth(mockParams, true);
 
       expect(apiRequest).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -218,7 +226,7 @@ describe('SiiSimpleApiService', () => {
       );
     });
 
-    it('should throw GetSalesForMonthError on API error', async () => {
+    it('should throw GetTransactionsForMonthError on API error', async () => {
       const mockErrorResponse = {
         success: false,
         error: {
@@ -230,13 +238,13 @@ describe('SiiSimpleApiService', () => {
       (apiRequest as jest.MockedFunction<any>).mockResolvedValueOnce(mockErrorResponse);
 
       try {
-        await service.getSalesForMonth(mockParams);
+        await service.getTransactionsForMonth(mockParams, true);
         expect(false).toBe(true); // This line should not be reached
       } catch (error) {
-        expect(error).toBeInstanceOf(GetSalesForMonthError);
-        expect((error as GetSalesForMonthError).message).toBe(mockErrorResponse.error.message);
-        expect((error as GetSalesForMonthError).code).toBe(GetSalesForMonthErrorCode.UNKNOWN_ERROR);
-        expect((error as GetSalesForMonthError).data).toEqual(mockErrorResponse.error);
+        expect(error).toBeInstanceOf(GetTransactionsForMonthError);
+        expect((error as GetTransactionsForMonthError).message).toBe(mockErrorResponse.error.message);
+        expect((error as GetTransactionsForMonthError).code).toBe(GetTransactionsForMonthErrorCode.UNKNOWN_ERROR);
+        expect((error as GetTransactionsForMonthError).data).toEqual(mockErrorResponse.error);
       }
     });
 
@@ -313,12 +321,16 @@ describe('SiiSimpleApiService', () => {
               },
             ],
           },
+          compras: {
+            resumenes: [],
+            detalleCompras: [],
+          },
         },
       };
 
       (apiRequest as jest.MockedFunction<any>).mockResolvedValueOnce(mockResponse);
 
-      const result = await service.getSalesForMonth(mockParams);
+      const result = await service.getTransactionsForMonth(mockParams, true);
 
       // Verify summaries mapping
       expect(result.summaries).toHaveLength(2);

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ConfigPanel from './components/ConfigPanel';
 import SalesPage from './pages/SalesPage';
+import PurchasesPage from './pages/PurchasesPage';
 import { ConfigProvider } from './contexts/ConfigContext';
 import './App.css';
 
@@ -13,6 +14,8 @@ const App: React.FC = () => {
     switch (activeFeature) {
       case 'sales':
         return <SalesPage />;
+      case 'purchases':
+        return <PurchasesPage />;
       default:
         return <div>Seleccione una función del menú</div>;
     }

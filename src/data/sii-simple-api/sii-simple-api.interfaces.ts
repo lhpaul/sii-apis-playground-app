@@ -49,7 +49,7 @@ export interface SalesDocumentSummary {
   status: string | null; // Estado del documento ("Reclamado", "Confirmada", "Pendiente", etc.). Puede ser null si no se conoce.
 }
 
-export interface Sale {
+export interface Transaction {
   dteId: number; // Código del tipo de DTE (ej. 33=Factura Electrónica).
   dteDescription: string; // Descripción legible del TipoDTE.
   saleType: string | null; // Tipo de venta (campo opcional).
@@ -89,7 +89,8 @@ export interface Sale {
   status: string; // Estado del documento ("Reclamado", "Confirmada", "Pendiente", etc.).
 }
 
-export interface GetSalesResponse {
-  summaries:SalesDocumentSummary[];
-  sales: Sale[];
+export interface GetTransactionsResponse {
+  summaries: SalesDocumentSummary[];
+  sales: Transaction[];
+  purchases: Transaction[];
 }
